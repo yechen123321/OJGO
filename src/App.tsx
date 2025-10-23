@@ -7,6 +7,7 @@ import ProblemBank from './pages/ProblemBank'
 import ProblemSolve from './pages/ProblemSolve'
 import WeeklyTests from './pages/WeeklyTests'
 import WeeklyTestSignup from './pages/WeeklyTestSignup'
+import Forum from './pages/Forum'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
         <Route path="/problems/:id" element={<ProblemSolve />} />
         <Route path="/weekly-tests" element={<WeeklyTests />} />
         <Route path="/weekly-tests/:id/signup" element={<WeeklyTestSignup />} />
+        <Route path="/forum" element={<Forum />} />
       </Routes>
     </div>
   )

@@ -163,7 +163,7 @@ const ProblemBank: React.FC = () => {
   }, [solved]);
 
   const filtered = useMemo(() => {
-    let list = mockProblems.filter((p) => {
+    const list = mockProblems.filter((p) => {
       if (difficulty !== "全部" && p.difficulty !== difficulty) return false;
       if (search && !p.title.toLowerCase().includes(search.toLowerCase()))
         return false;
@@ -182,10 +182,11 @@ const ProblemBank: React.FC = () => {
       case "提交数":
         list.sort((a, b) => b.submissions - a.submissions);
         break;
-      case "难度":
+      case "难度": {
         const weight = { 困难: 3, 中等: 2, 简单: 1 } as const;
         list.sort((a, b) => weight[b.difficulty] - weight[a.difficulty]);
         break;
+      }
       default:
         list.sort((a, b) => a.id - b.id);
     }
@@ -337,41 +338,43 @@ const ProblemBank: React.FC = () => {
       <Header />
       <div className="pt-16">
         {/* 头部区域 */}
-        <section className="bg-white py-10 border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="flex items-center justify-between mb-6">
-              <h1 className="text-3xl !font-bold text-gray-900">题库</h1>
-            </div>
-            <FilterBar
-              search={search}
-              onSearchChange={setSearch}
-              sortBy={sortBy}
-              onSortByChange={(v) => setSortBy(v)}
-              difficulty={difficulty}
-              onDifficultyChange={(d) => setDifficulty(d)}
-              selectedTags={selectedTags}
-              onToggleTag={toggleTag}
-              status={status}
-              onStatusChange={(s) => setStatus(s)}
-              allTags={allTags}
-            />
+        <section className="bg-white py-6 md:py-10 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+        
+        
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-3xl !font-bold text-gray-900">题库</h1>
+        </div>
+        <FilterBar
+          search={search}
+          onSearchChange={setSearch}
+          sortBy={sortBy}
+          onSortByChange={(v) => setSortBy(v)}
+          difficulty={difficulty}
+          onDifficultyChange={(d) => setDifficulty(d)}
+          selectedTags={selectedTags}
+          onToggleTag={toggleTag}
+          status={status}
+          onStatusChange={(s) => setStatus(s)}
+          allTags={allTags}
+        />
           </div>
         </section>
-
+        
         {/* 列表区 */}
-        <section className="py-8 bg-[#F9F9F9]">
-          <div className="max-w-7xl mx-auto px-6">
-            <Card className="rounded-xl">
-              <Table<ProblemItem>
-                columns={columns}
-                dataSource={filtered}
-                rowKey="id"
-                tableLayout="fixed"
-                scroll={{ x: "max-content" }}
-                onRow={(record) => ({
-                  className: "hover:cursor-pointer",
-                  onClick: () =>
-                    navigate(`/problems/${record.id}`, { state: record }),
+        <section className="py-6 md:py-8 bg-[#F9F9F9]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <Card className="rounded-xl">
+            <Table<ProblemItem>
+              columns={columns}
+              dataSource={filtered}
+              rowKey="id"
+              tableLayout="fixed"
+              scroll={{ x: "max-content" }}
+              onRow={(record) => ({
+                className: "hover:cursor-pointer",
+                onClick: () =>
+                  navigate(`/problems/${record.id}`, { state: record }),
                 })}
                 pagination={{
                   current: page,

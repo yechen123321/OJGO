@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const Header: React.FC = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-200 bg-[#F9F9F9]">
-      <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14 md:h-16">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <div className="w-9 h-9 rounded bg-blue-500 flex items-center justify-center">
@@ -41,12 +41,12 @@ const Header: React.FC = () => {
           >
             周测
           </Link>
-          <a
-            href="#"
+          <Link
+            to="/forum"
             className="inline-block transition-all duration-200 ease-out hover:text-gray-900 hover:text-[16px]"
           >
             讨论
-          </a>
+          </Link>
         </nav>
 
         {/* Search */}

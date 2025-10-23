@@ -3,9 +3,9 @@ import React from "react";
 const Footer: React.FC = () => {
   return (
     <footer className="bg-[#F3F4F6] text-gray-800">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
         {/* 主要内容区域 */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8 mb-6 md:mb-10">
           {/* Logo 和描述 */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
@@ -107,7 +107,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* 分隔线 */}
-        <div className="border-t border-gray-300 pt-8">
+        <div className="border-t border-gray-300 pt-6 md:pt-8">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="text-gray-600 text-sm">
               © 2025 CodeJudge. All rights reserved.

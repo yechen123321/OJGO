@@ -1,6 +1,7 @@
+// cSpell:ignore nums
 import React, { useMemo, useRef, useState } from "react";
 import ProblemSolveHeader from "../components/ProblemSolveHeader";
-import { Card, Typography, Tag, Button, Tabs } from "antd";
+import { Card, Tabs } from "antd";
 import { useLocation, useParams } from "react-router-dom";
 import ProblemDescription from "../components/ProblemDescription";
 import EditorPanel from "../components/EditorPanel";
@@ -55,7 +56,7 @@ const ProblemSolve: React.FC = () => {
 
   // 分栏宽度与收起控制
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [leftWidth, setLeftWidth] = useState<number>(480);
+  const [leftWidth, setLeftWidth] = useState<number>(560);
   const draggingRef = useRef<boolean>(false);
   const rafPendingRef = useRef<boolean>(false);
   const lastXRef = useRef<number>(0);
@@ -68,7 +69,10 @@ const ProblemSolve: React.FC = () => {
     e.preventDefault();
     try {
       e.currentTarget.setPointerCapture(e.pointerId);
-    } catch {}
+    } catch (_err) {
+      void _err;
+      /* noop: pointer capture may not be supported */
+    }
     const onMove = (ev: PointerEvent) => {
       if (!draggingRef.current || !containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
@@ -90,7 +94,10 @@ const ProblemSolve: React.FC = () => {
       window.removeEventListener("pointerup", onUp);
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
-      } catch {}
+      } catch (_err) {
+         void _err;
+         /* noop: pointer capture may not be supported */
+       }
     };
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
@@ -102,67 +109,69 @@ const ProblemSolve: React.FC = () => {
         title={problem?.title || `题目 #${id}`}
         problemId={problem?.id || Number(id)}
       />
-      <div className="pt-12 select-none no-select flex-1 min-h-0">
+      <div className="pt-14 md:pt-16 select-none no-select flex-1 min-h-0">
         {/* 主内容区：可拖拽分栏 */}
-        <section className="py-4 bg-[#F9F9F9] h-full">
-          <div className="max-w-7xl mx-auto px-2 h-full">
-            <div
-              ref={containerRef}
-              className="w-full h-[88vh] bg-transparent rounded-xl border border-gray-200 overflow-hidden"
-            >
+        <section className="py-2 sm:py-3 bg-[#F9F9F9] h-full">
+          <div className="mx-auto max-w-[1600px] xl:max-w-[1800px] px-2 sm:px-4 md:px-6 h-full">
+             <div
+               ref={containerRef}
+               className="w-full h-[calc(100vh-3.5rem)] md:h-[calc(100vh-4rem)] bg-transparent rounded-xl border border-gray-200 overflow-hidden"
+             >
               <div className="flex h-full relative">
                 {/* 左侧题目详情 */}
                 <div
                   style={{ width: leftWidth, willChange: "width" }}
                   className={`shrink-0`}
                 >
-                  <Card className="h-full overflow-y-auto rounded-none">
+                  <Card className="h-full overflow-y-auto rounded-none" styles={{ body: { padding: 8 } }}>
                     <div className="flex flex-col gap-3 h-full">
                       {/* 左侧头部可选区域省略 */}
                       <Tabs
                         defaultActiveKey="desc"
+                        size="small"
+                        tabBarStyle={{ marginBottom: 8 }}
                         items={[
-                          {
-                            key: "desc",
-                            label: "题目描述",
-                            children: (
-                              <ProblemDescription
-                                title={problem ? problem.title : `题目 #${id}`}
-                                meta={{
-                                  difficulty: problem?.difficulty,
-                                  acceptance: problem?.acceptance,
-                                  submissions: problem?.submissions,
-                                  tags: problem?.tags,
-                                }}
-                                markdown={`给定一个整数数组 \`nums\` 和一个整数目标值 \`target\`，请你在该数组中找出和为目标值 \`target\` 的那两个整数，并返回它们的数组下标。\n\n你可以假设每种输入只会对应一个答案，且你不能使用两次相同的元素。\n\n你可以按任意顺序返回答案。\n\n## 示例\n**示例 1**\n\`\`\`text\n输入: nums = [2,7,11,15], target = 9\n\n输出: [0,1]\n\`\`\`\n\n**示例 2**\n\`\`\`text\n输入: nums = [3,2,4], target = 6\n\n输出: [1,2]\n\`\`\`\n\n**示例 3**\n\`\`\`text\n输入: nums = [3,3], target = 6\n\n输出: [0,1]\n\`\`\`\n\n## 提示\n- 2 ≤ \`nums.length\` ≤ 10^4\n- -10^9 ≤ \`nums[i]\` ≤ 10^9\n- -10^9 ≤ \`target\` ≤ 10^9\n- 只会存在一个有效答案\n\n## 进阶\n你可以想出一个时间复杂度小于 \`O(n^2)\` 的算法吗？`}
-                              />
-                            ),
-                          },
-                          {
-                            key: "solution",
-                            label: "题解",
-                            children: (
-                              <div className="text-gray-600 leading-relaxed select-text">
-                                <p>
-                                  这里展示题解与思路，支持 Markdown
-                                  渲染与代码高亮（待接入）。
-                                </p>
-                              </div>
-                            ),
-                          },
-                          {
-                            key: "submissions",
-                            label: "提交记录",
-                            children: (
-                              <div className="text-gray-600 leading-relaxed select-text">
-                                <p>
-                                  这里展示你对该题的提交历史、状态与耗时（待接入）。
-                                </p>
-                              </div>
-                            ),
-                          },
-                        ]}
-                      />
+                           {
+                             key: "desc",
+                             label: "题目描述",
+                             children: (
+                               <ProblemDescription
+                                 title={problem ? problem.title : `题目 #${id}`}
+                                 meta={{
+                                   difficulty: problem?.difficulty,
+                                   acceptance: problem?.acceptance,
+                                   submissions: problem?.submissions,
+                                   tags: problem?.tags,
+                                 }}
+                                 markdown={`给定一个整数数组 \`nums\` 和一个整数目标值 \`target\`，请你在该数组中找出和为目标值 \`target\` 的那两个整数，并返回它们的数组下标。\n\n你可以假设每种输入只会对应一个答案，且你不能使用两次相同的元素。\n\n你可以按任意顺序返回答案。\n\n## 示例\n**示例 1**\n\`\`\`text\n输入: nums = [2,7,11,15], target = 9\n\n输出: [0,1]\n\`\`\`\n\n**示例 2**\n\`\`\`text\n输入: nums = [3,2,4], target = 6\n\n输出: [1,2]\n\`\`\`\n\n**示例 3**\n\`\`\`text\n输入: nums = [3,3], target = 6\n\n输出: [0,1]\n\`\`\`\n\n## 提示\n- 2 ≤ \`nums.length\` ≤ 10^4\n- -10^9 ≤ \`nums[i]\` ≤ 10^9\n- -10^9 ≤ \`target\` ≤ 10^9\n- 只会存在一个有效答案\n\n## 进阶\n你可以想出一个时间复杂度小于 \`O(n^2)\` 的算法吗？`}
+                               />
+                             ),
+                           },
+                           {
+                             key: "solution",
+                             label: "题解",
+                             children: (
+                               <div className="text-gray-600 leading-relaxed select-text">
+                                 <p>
+                                   这里展示题解与思路，支持 Markdown
+                                   渲染与代码高亮（待接入）。
+                                 </p>
+                               </div>
+                             ),
+                           },
+                           {
+                             key: "submissions",
+                             label: "提交记录",
+                             children: (
+                               <div className="text-gray-600 leading-relaxed select-text">
+                                 <p>
+                                   这里展示你对该题的提交历史、状态与耗时（待接入）。
+                                 </p>
+                               </div>
+                             ),
+                           },
+                         ]}
+                       />
                     </div>
                   </Card>
                 </div>

@@ -81,11 +81,11 @@ const Metrics: React.FC = () => {
   ];
 
   return (
-    <section className="mt-16">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+    <section className="mt-8 md:mt-16">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {metrics.map((metric, index) => (
-            <div key={index} className="text-center bg-[white] p-6 rounded-md ">
+            <div key={index} className="text-center bg-[white] p-4 md:p-6 rounded-md ">
               <div className="flex justify-center mb-4">{metric.icon}</div>
               <div className="text-3xl font-bold text-gray-900 mb-2">
                 {metric.value}

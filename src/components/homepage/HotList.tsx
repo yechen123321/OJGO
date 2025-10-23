@@ -12,8 +12,8 @@ const problems = [
 const HotList: React.FC = () => {
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
+    <section className="py-10 md:py-16 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-3xl !font-bold text-gray-900">热门题目</h2>
           <div className="flex items-center gap-2">
@@ -23,17 +23,17 @@ const HotList: React.FC = () => {
               </svg>
               <input 
                 placeholder="搜索题目..." 
-                className="w-72 md:w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-56 sm:w-64 md:w-80 lg:w-96 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
         </div>
         
-        <div className="space-y-4">
+        <div className="space-y-3 md:space-y-4">
           {problems.map((problem) => (
             <div
               key={problem.id}
-              className="bg-white hover:cursor-pointer rounded-xl border border-gray-200 shadow-sm flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
+              className="bg-white hover:cursor-pointer rounded-xl border border-gray-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-0 p-4 md:p-5 hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center gap-4">
                 <span className="text-gray-400 font-medium w-8">#{problem.id}</span>
@@ -68,7 +68,7 @@ const HotList: React.FC = () => {
               </div>
 
               {/* 右侧指标与操作 */}
-              <div className="flex items-center gap-6 text-sm">
+              <div className="flex items-center gap-4 sm:gap-6 text-sm">
                 <div className="flex items-center gap-2 text-gray-700">
                   {/* 通过率 */}
                   <svg className="w-4 h-4 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor">
