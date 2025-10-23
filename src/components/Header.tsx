@@ -35,12 +35,12 @@ const Header: React.FC = () => {
           >
             题库
           </Link>
-          <a
-            href="#"
+          <Link
+            to="/weekly-tests"
             className="inline-block transition-all duration-200 ease-out hover:text-gray-900 hover:text-[16px]"
           >
             周测
-          </a>
+          </Link>
           <a
             href="#"
             className="inline-block transition-all duration-200 ease-out hover:text-gray-900 hover:text-[16px]"

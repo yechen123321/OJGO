@@ -5,6 +5,8 @@ import Charts from './pages/Charts'
 import TablePage from './pages/TablePage'
 import ProblemBank from './pages/ProblemBank'
 import ProblemSolve from './pages/ProblemSolve'
+import WeeklyTests from './pages/WeeklyTests'
+import WeeklyTestSignup from './pages/WeeklyTestSignup'
 
 function App() {
 
@@ -16,6 +18,8 @@ function App() {
         <Route path="/table" element={<TablePage />} />
         <Route path="/problems" element={<ProblemBank />} />
         <Route path="/problems/:id" element={<ProblemSolve />} />
+        <Route path="/weekly-tests" element={<WeeklyTests />} />
+        <Route path="/weekly-tests/:id/signup" element={<WeeklyTestSignup />} />
       </Routes>
     </div>
   )
