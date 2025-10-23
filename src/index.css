@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* 页面内容统一禁止文字选择与图片拖拽 */
+.no-select {
+  -webkit-touch-callout: none; /* iOS 禁止长按菜单 */
+  user-select: none;
+}
+.no-select img,
+.no-select svg {
+  -webkit-user-drag: none; /* 禁止图片/矢量拖拽 */
+  user-select: none;
+}
