@@ -10,3 +10,9 @@
   -webkit-user-drag: none; /* 禁止图片/矢量拖拽 */
   user-select: none;
 }
+
+/* 强制 Monaco 编辑器高度为 100% */
+.monaco-editor,
+.monaco-editor .overflow-guard {
+  height: 100% !important;
+}

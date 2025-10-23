@@ -2,6 +2,8 @@ import React, { useMemo, useRef, useState } from "react";
 import ProblemSolveHeader from "../components/ProblemSolveHeader";
 import { Card, Typography, Tag, Button, Tabs } from "antd";
 import { useLocation, useParams } from "react-router-dom";
+import ProblemDescription from "../components/ProblemDescription";
+import EditorPanel from "../components/EditorPanel";
 
 interface ProblemItem {
   id: number;
@@ -94,21 +96,19 @@ const ProblemSolve: React.FC = () => {
     window.addEventListener("pointerup", onUp);
   };
 
-
-
   return (
     <div className="min-h-screen bg-[#F9F9F9] flex flex-col">
-      <ProblemSolveHeader title={problem?.title || `题目 #${id}`} problemId={problem?.id || Number(id)} />
-      <div className="pt-12 select-none no-select">
-        {/* 顶部区域移除：折叠控制已迁移到左侧标题栏 */}
-
+      <ProblemSolveHeader
+        title={problem?.title || `题目 #${id}`}
+        problemId={problem?.id || Number(id)}
+      />
+      <div className="pt-12 select-none no-select flex-1 min-h-0">
         {/* 主内容区：可拖拽分栏 */}
-        <section className="py-4 bg-[#F9F9F9]">
-          <div className="max-w-7xl mx-auto px-2">
+        <section className="py-4 bg-[#F9F9F9] h-full">
+          <div className="max-w-7xl mx-auto px-2 h-full">
             <div
               ref={containerRef}
-              className="w-full bg-transparent rounded-xl border border-gray-200 overflow-hidden"
-              style={{ height: 560 }}
+              className="w-full h-[88vh] bg-transparent rounded-xl border border-gray-200 overflow-hidden"
             >
               <div className="flex h-full relative">
                 {/* 左侧题目详情 */}
@@ -116,55 +116,54 @@ const ProblemSolve: React.FC = () => {
                   style={{ width: leftWidth, willChange: "width" }}
                   className={`shrink-0`}
                 >
-                  <Card className="h-full rounded-none">
-                    <div className="flex flex-col gap-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <Typography.Title level={4} style={{ marginTop: 0, marginBottom: 0 }}>
-                            {problem ? problem.title : `题目 #${id}`}
-                          </Typography.Title>
-                          {problem && (
-                            <Tag color={problem.difficulty === '简单' ? 'green' : problem.difficulty === '中等' ? 'orange' : 'red'}>
-                              {problem.difficulty}
-                            </Tag>
-                          )}
-                        </div>
-
-                      </div>
+                  <Card className="h-full overflow-y-auto rounded-none">
+                    <div className="flex flex-col gap-3 h-full">
+                      {/* 左侧头部可选区域省略 */}
                       <Tabs
                         defaultActiveKey="desc"
                         items={[
                           {
-                            key: 'desc',
-                            label: '题目描述',
+                            key: "desc",
+                            label: "题目描述",
                             children: (
-                              <div className="text-gray-600 leading-relaxed">
-                                <p>这里是题目详情内容区域，包括题目描述、输入输出说明、样例以及提示等。后续可与服务端对接，动态渲染题面。</p>
+                              <ProblemDescription
+                                title={problem ? problem.title : `题目 #${id}`}
+                                meta={{
+                                  difficulty: problem?.difficulty,
+                                  acceptance: problem?.acceptance,
+                                  submissions: problem?.submissions,
+                                  tags: problem?.tags,
+                                }}
+                                markdown={`给定一个整数数组 \`nums\` 和一个整数目标值 \`target\`，请你在该数组中找出和为目标值 \`target\` 的那两个整数，并返回它们的数组下标。\n\n你可以假设每种输入只会对应一个答案，且你不能使用两次相同的元素。\n\n你可以按任意顺序返回答案。\n\n## 示例\n**示例 1**\n\`\`\`text\n输入: nums = [2,7,11,15], target = 9\n\n输出: [0,1]\n\`\`\`\n\n**示例 2**\n\`\`\`text\n输入: nums = [3,2,4], target = 6\n\n输出: [1,2]\n\`\`\`\n\n**示例 3**\n\`\`\`text\n输入: nums = [3,3], target = 6\n\n输出: [0,1]\n\`\`\`\n\n## 提示\n- 2 ≤ \`nums.length\` ≤ 10^4\n- -10^9 ≤ \`nums[i]\` ≤ 10^9\n- -10^9 ≤ \`target\` ≤ 10^9\n- 只会存在一个有效答案\n\n## 进阶\n你可以想出一个时间复杂度小于 \`O(n^2)\` 的算法吗？`}
+                              />
+                            ),
+                          },
+                          {
+                            key: "solution",
+                            label: "题解",
+                            children: (
+                              <div className="text-gray-600 leading-relaxed select-text">
+                                <p>
+                                  这里展示题解与思路，支持 Markdown
+                                  渲染与代码高亮（待接入）。
+                                </p>
                               </div>
                             ),
                           },
                           {
-                            key: 'solution',
-                            label: '题解',
+                            key: "submissions",
+                            label: "提交记录",
                             children: (
-                              <div className="text-gray-600 leading-relaxed">
-                                <p>这里展示题解与思路，支持 Markdown 渲染与代码高亮（待接入）。</p>
-                              </div>
-                            ),
-                          },
-                          {
-                            key: 'submissions',
-                            label: '提交记录',
-                            children: (
-                              <div className="text-gray-600 leading-relaxed">
-                                <p>这里展示你对该题的提交历史、状态与耗时（待接入）。</p>
+                              <div className="text-gray-600 leading-relaxed select-text">
+                                <p>
+                                  这里展示你对该题的提交历史、状态与耗时（待接入）。
+                                </p>
                               </div>
                             ),
                           },
                         ]}
                       />
                     </div>
-
                   </Card>
                 </div>
 
@@ -175,21 +174,14 @@ const ProblemSolve: React.FC = () => {
                   style={{ width: 8 }}
                 />
 
-                {/* 右侧编译器占位 */}
+                {/* 右侧编译器区域 */}
                 <div className="flex-1">
-                  <Card className="h-full rounded-none">
-                    <div className="h-full flex items-center justify-center text-gray-600">
-                      <div>
-                        <Typography.Title
-                          level={4}
-                          style={{ textAlign: "center" }}
-                        >
-                          编译器区域（待实现）
-                        </Typography.Title>
-                        <Typography.Paragraph style={{ textAlign: "center" }}>
-                          后续将集成在线代码编辑器与运行评测功能。
-                        </Typography.Paragraph>
-                      </div>
+                  <Card
+                    className="h-full rounded-none"
+                    styles={{ body: { height: "100%", padding: 0 } }}
+                  >
+                    <div className="h-full">
+                      <EditorPanel />
                     </div>
                   </Card>
                 </div>
