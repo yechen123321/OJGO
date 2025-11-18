@@ -8,19 +8,21 @@ SET time_zone = '+00:00';             -- 设置时区为 UTC，确保时间戳�
 CREATE DATABASE IF NOT EXISTS gin_demo DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;  -- 创建数据库，如不存在则创建
 USE gin_demo;                         -- 切换到目标数据库
 
--- 用户表：管理员/学生
 CREATE TABLE users (
-    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,                                                   -- 用户主键，无符号大整数，自增
-    username VARCHAR(50) NOT NULL UNIQUE,                                                            -- 用户名，最长50字符，非空且唯一
-    email VARCHAR(255) NOT NULL UNIQUE,                                                              -- 邮箱地址，最长255字符，非空且唯一
-    password_hash VARCHAR(255) NOT NULL,                                                             -- 密码哈希值，bcrypt 加密后存储
-    role ENUM('admin','student') NOT NULL,                                                           -- 用户角色，枚举类型：管理员或学生
-    status ENUM('active','suspended') NOT NULL DEFAULT 'active',                                     -- 用户状态，枚举类型：活跃或暂停，默认活跃
-    last_login_at DATETIME(6) NULL,                                                                  -- 最后登录时间，微秒精度，可为空
-    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),                                    -- 创建时间，微秒精度，默认当前时间
-    updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),    -- 更新时间，微秒精度，自动更新
-    INDEX idx_users_role (role)                                                                      -- 角色字段索引，优化按角色查询
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;                                  -- InnoDB 引擎，utf8mb4 字符集
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    account VARCHAR(50) NOT NULL UNIQUE,
+    username VARCHAR(50) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    name VARCHAR(100) NULL,
+    student_no VARCHAR(50) NULL UNIQUE,
+    role ENUM('admin','student') NOT NULL,
+    status ENUM('active','suspended') NOT NULL DEFAULT 'active',
+    last_login_at DATETIME(6) NULL,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+    INDEX idx_users_role (role)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 论坛分类
 CREATE TABLE forum_categories (
@@ -136,12 +138,11 @@ CREATE TABLE submissions (
 START TRANSACTION;                                                                                    -- 开始事务，确保数据插入的原子性
 
 -- Users：五个基础账号（密码哈希为占位符，请替换为真实 bcrypt 哈希）
-INSERT IGNORE INTO users (username, email, password_hash, role, is_active, created_at) VALUES        -- 插入用户数据，忽略重复键冲突
-('admin', 'admin@example.com', '$2a$10$placeholder_hash_admin', 'admin', true, NOW()),               -- 管理员账号：admin/admin@example.com
-('teacher1', 'teacher1@example.com', '$2a$10$placeholder_hash_teacher1', 'teacher', true, NOW()),     -- 教师账号：teacher1/teacher1@example.com
-('student1', 'student1@example.com', '$2a$10$placeholder_hash_student1', 'student', true, NOW()),     -- 学生账号1：student1/student1@example.com
-('student2', 'student2@example.com', '$2a$10$placeholder_hash_student2', 'student', true, NOW()),     -- 学生账号2：student2/student2@example.com
-('student3', 'student3@example.com', '$2a$10$placeholder_hash_student3', 'student', true, NOW());     -- 学生账号3：student3/student3@example.com
+INSERT IGNORE INTO users (account, username, email, password, role, status, created_at) VALUES
+('admin', 'admin', 'admin@example.com', 'admin123', 'admin', 'active', NOW()),
+('20250001', 'student1', 'student1@example.com', '123456', 'student', 'active', NOW()),
+('20250002', 'student2', 'student2@example.com', '123456', 'student', 'active', NOW()),
+('20250003', 'student3', 'student3@example.com', '123456', 'student', 'active', NOW());
 
 -- Forum Categories：由 admin 创建
 INSERT IGNORE INTO forum_categories (name, description, created_by, created_at) VALUES               -- 插入论坛分类数据，忽略重复键冲突

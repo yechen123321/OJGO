@@ -1,8 +1,10 @@
+// 数据库连接管理
 package database
 
+// 依赖导入：标准库、GORM 驱动与日志、项目配置
 import (
-	"database/sql"
-	"fmt"
+    "database/sql"
+    "fmt"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -13,14 +15,15 @@ import (
 	"Golang/internal/config"
 )
 
-// Connect initializes a GORM DB connection based on configuration.
+// Connect 根据配置初始化 GORM 数据库连接，并设置连接池
 func Connect(cfg *config.Config) (*gorm.DB, error) {
 	var (
 		db  *gorm.DB
 		err error
 	)
 
-	gormLogger := logger.Default.LogMode(logger.Info)
+    // 启用 GORM Info 日志，便于观察 SQL
+    gormLogger := logger.Default.LogMode(logger.Info)
 
 	switch cfg.DBDriver {
 	case "sqlite":
@@ -39,19 +42,19 @@ func Connect(cfg *config.Config) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// Configure connection pool
-	sqlDB, err := dbDB(db)
-	if err != nil {
-		return nil, err
-	}
-	sqlDB.SetMaxOpenConns(20)
-	sqlDB.SetMaxIdleConns(10)
-	// sqlDB.SetConnMaxLifetime(time.Hour)
+    // 配置连接池
+    sqlDB, err := dbDB(db)
+    if err != nil {
+        return nil, err
+    }
+    sqlDB.SetMaxOpenConns(20)
+    sqlDB.SetMaxIdleConns(10)
+    // sqlDB.SetConnMaxLifetime(time.Hour)
 
-	return db, nil
+    return db, nil
 }
 
-// dbDB extracts *sql.DB from GORM for pool settings.
+// dbDB 从 GORM 获取底层 *sql.DB，用于设置连接池
 func dbDB(db *gorm.DB) (*sql.DB, error) {
-	return db.DB()
+    return db.DB()
 }
